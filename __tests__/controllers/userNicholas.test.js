@@ -28,7 +28,7 @@ describe('user controller Nicholas endpoint test', () => {
         jest.spyOn(userUtils, 'getPostsForUser').mockResolvedValueOnce(posts);   
         const userPosts = {user: user, posts: posts}    
         const mReq = {userPosts};
-        const mRes = { json: jest.fn(), status: jest.fn().mockReturnThis() }; 
+        const mRes = { json: jest.fn(), status: jest.fn().mockReturnThis(), locals:{data:""} }; 
         await controller.getNicholas(mReq,mRes);
         expect(mRes.json).toBeCalledWith(userPosts);
     });

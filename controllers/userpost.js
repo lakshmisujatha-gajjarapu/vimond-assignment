@@ -64,20 +64,18 @@ const userpostCache = new nodeCache();
 *  @returns {response.model}   500 Internal Exception
  */
 
-const getNicholas = (async (req, res) => {
+const getNicholas = (async (req, res, next) => {
     try {
-        if(userpostCache.has('Nicholas')){
-            res.status(200).json(userpostCache.get('Nicholas'));
-        }else{
-            const user = await userUtils.getUserById(8);
-            const posts = await userUtils.getPostsForUser(user);
-            const response = {
-                'user' : user,
-                'posts' : posts
-            };
-            userpostCache.set('Nicholas',response, 10)
-            res.status(200).json(response);
-        }
+        const user = await userUtils.getUserById(8);
+        const posts = await userUtils.getPostsForUser(user);
+        const userposts = {
+            'user' : user,
+            'posts' : posts
+        };
+        res.locals.data = userposts;
+        res.status(200).json(userposts); 
+        
+        return next();
     } catch (e) {
         console.log(e);
         exceptions.internalServerException(req,res, e);
@@ -92,21 +90,19 @@ const getNicholas = (async (req, res) => {
 *  @returns {response.model}   500 Internal Exception
  */
 
-const getRomaguera = (async (req, res) => {
+const getRomaguera = (async (req, res, next) => {
     try {
-        if(userpostCache.has('Romaguera')){
-            res.status(200).json(userpostCache.get('Romaguera'))
-        }else {
-            const users = await userUtils.getUsersByCompanyName('Romaguera');
-            const allPosts = await userUtils.getPosts();
-            let posts = [];
-            users.forEach(user => {
-                    posts = posts.concat(allPosts.filter(post=> post.userId === user.id));
-                }
-            )
-            userpostCache.set('Romaguera',posts, 10)
-            res.status(200).json(posts);
-        }
+        const users = await userUtils.getUsersByCompanyName('Romaguera');
+        const allPosts = await userUtils.getPosts();
+        let posts = [];
+        users.forEach(user => {
+                posts = posts.concat(allPosts.filter(post=> post.userId === user.id));
+            }
+        )
+        res.locals.data = posts;
+        res.status(200).json(posts); 
+        
+        return next();
     } catch (e) {
         console.log(e);
         exceptions.internalServerException(req, res, e);
@@ -120,15 +116,13 @@ const getRomaguera = (async (req, res) => {
 *  @returns {response.model}   500 Internal Exception
  */
 
-const getSortedUsers = (async (req, res) => {
+const getSortedUsers = (async (req, res, next) => {
     try{
-        if(userpostCache.has('sorted-users')){
-            res.status(200).json(userpostCache.get('sorted-users'));
-        }else {
-            const sortedUsers = await userUtils.getSortedUsers();
-            userpostCache.set('sorted-users',sortedUsers, 10)
-            res.status(200).json(sortedUsers);
-        }
+        const sortedUsers = await userUtils.getSortedUsers();
+        res.locals.data = sortedUsers;
+        res.status(200).json(sortedUsers);
+        
+        return next();
     } catch (e) {
         console.log(e);
         exceptions.internalServerException(req, res, e);

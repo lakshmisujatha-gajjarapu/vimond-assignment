@@ -2,10 +2,7 @@ const fs = require('fs');
 const controller = require('../../controllers/images');
 const imageUtils = require('../../utils/imageUtils');
 const sinon = require('sinon');
-const fetch = require('node-fetch');
 const request = require('supertest');
-const { response } = require('express');
-const snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 describe('image controller test', () => {
     let server;
     beforeEach(function () {
@@ -33,7 +30,7 @@ describe('image controller test', () => {
           size: "1",
           offset: "10"
         }};
-        const mRes = { json: jest.fn(), status: jest.fn().mockReturnThis() }; 
+        const mRes = { json: jest.fn(), status: jest.fn().mockReturnThis(), locals:{data:""} }; 
         await controller.getImages(mReq,mRes);
         expect(mRes.json).toBeCalledWith(photos);
     });
@@ -47,7 +44,7 @@ describe('image controller test', () => {
         size: "1",
         offset: "10"
       }};
-      const mRes = { json: jest.fn(), status: jest.fn().mockReturnThis() }; 
+      const mRes = { json: jest.fn(), status: jest.fn().mockReturnThis(), locals:{data:""} }; 
       await controller.getImages(mReq,mRes);
       expect(mRes.json).toBeCalledWith(photos);
   });
@@ -60,7 +57,7 @@ describe('image controller test', () => {
     const mReq = {query:{
       size: "1"
     }};
-    const mRes = { json: jest.fn(), status: jest.fn().mockReturnThis() }; 
+    const mRes = { json: jest.fn(), status: jest.fn().mockReturnThis(), locals:{data:""} }; 
     await controller.getImages(mReq,mRes);
     expect(mRes.json).toBeCalledWith(photos);
 });
@@ -72,7 +69,7 @@ it('should test the photos with offset', async () => {
   const mReq = {query:{
     offset: "10"
   }};
-  const mRes = { json: jest.fn(), status: jest.fn().mockReturnThis() }; 
+  const mRes = { json: jest.fn(), status: jest.fn().mockReturnThis(), locals:{data:""} }; 
   await controller.getImages(mReq,mRes);
   expect(mRes.json).toBeCalledWith(photos);
 });

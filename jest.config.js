@@ -28,8 +28,10 @@ module.exports = {
 
     // An array of regexp pattern strings used to skip coverage collection
     coveragePathIgnorePatterns: [
-      '/httpapi/__tests__/testData/*',
-      '/httpapi/utils/validation.js'
+      '/vimond-assignment/__tests__/testData/*',
+      '/vimond-assignment/utils/validation.js',
+      'vimond-assignment/utils/fileUtils.js',
+      'vimond-assignment/middlewares/cache.js'
     ],
 
     // A list of reporter names that Jest uses when writing coverage reports

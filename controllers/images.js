@@ -25,10 +25,9 @@ const { requestValidator } = require('../utils/validation');
  * @returns {response.model}   500 Internal Exception
  */
 
-const getImages = async(req, res) => {
+const getImages = async(req, res, next) => {
         const errors = requestValidator(req);
-        if (errors.length > 0) 
-            return exceptions.argumentException(req,res,errors);
+        if(errors.length > 0) return exceptions.argumentException(req,res,errors);
         try{
             let url = `${config.TYPICODE_URL}${routesNames.photos}`;
             const size = parseInt(req.query?.size, 0);
@@ -44,12 +43,10 @@ const getImages = async(req, res) => {
                     url = url + `?_limit=${size}`;                   
                     break;
             }
-            if(imageCache.has(url)){
-                return res.status(200).json(imageCache.get(url));
-            }
             const data = await imageUtils.getPhotos(url);
-            imageCache.set(url,data,10);
-            return res.status(200).json(data); 
+            res.locals.data = data;
+            res.status(200).json(data); 
+            return next();
         }catch (e) {
             console.log(e);
             return exceptions.internalServerException(req,res,e);  

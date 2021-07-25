@@ -27,7 +27,7 @@ describe('user controller sorted users test', () => {
         const sortedUsers = JSON.parse(userdata);
         jest.spyOn(userUtils, 'getSortedUsers').mockResolvedValueOnce(sortedUsers);  
         const mReq = {sortedUsers};
-        const mRes = { json: jest.fn(), status: jest.fn().mockReturnThis() }; 
+        const mRes = { json: jest.fn(), status: jest.fn().mockReturnThis(), locals:{data:""}}; 
         await controller.getSortedUsers(mReq,mRes);
         expect(mRes.json).toBeCalledWith(sortedUsers);
     });

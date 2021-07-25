@@ -28,7 +28,7 @@ describe('user controller Romeguara endpoint test', () => {
         jest.spyOn(userUtils, 'getUsersByCompanyName').mockResolvedValueOnce(users);
         jest.spyOn(userUtils, 'getPosts').mockResolvedValueOnce(posts);   
         const mReq = {posts};
-        const mRes = { json: jest.fn(), status: jest.fn().mockReturnThis() }; 
+        const mRes = { json: jest.fn(), status: jest.fn().mockReturnThis(), locals:{data:""} }; 
         await controller.getRomaguera(mReq,mRes);
         expect(mRes.json).toBeCalledWith(postsRomaguera);
     });
